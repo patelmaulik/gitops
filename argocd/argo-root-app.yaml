@@ -10,9 +10,9 @@ metadata:
 spec:
   project: santana
   source:
-    path: appset
+    path: argocd/appset
     repoURL: https://github.com/patelmaulik/gitops
-    targetRevision: main
+    targetRevision: HEAD
   destination:
     name: ''
     namespace: argo-apps
