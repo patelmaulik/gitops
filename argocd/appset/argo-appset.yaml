@@ -9,7 +9,7 @@ spec:
   generators:
   - git:
       repoURL: https://github.com/patelmaulik/gitops
-      revision: master
+      revision: HEAD
       directories:
       - path: apps/*
   template:
@@ -19,7 +19,7 @@ spec:
       project: santana
       source:
         repoURL: https://github.com/patelmaulik/gitops
-        targetRevision: master
+        targetRevision: HEAD
         path: '{{path}}'
       destination:
         server: https://kubernetes.default.svc
