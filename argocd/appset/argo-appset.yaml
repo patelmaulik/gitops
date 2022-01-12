@@ -11,7 +11,7 @@ spec:
       repoURL: https://github.com/patelmaulik/gitops
       revision: HEAD
       directories:
-      - path: argocd/apps/*
+      - path: apps/*
   template:
     metadata:
       name: '{{path.basename}}'
