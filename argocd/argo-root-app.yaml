@@ -12,7 +12,7 @@ spec:
   source:
     path: appset
     repoURL: https://github.com/patelmaulik/gitops
-    targetRevision: HEAD
+    targetRevision: main
   destination:
     name: ''
     namespace: argo-apps
