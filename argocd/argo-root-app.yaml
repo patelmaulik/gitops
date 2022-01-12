@@ -10,8 +10,8 @@ metadata:
 spec:
   project: santana
   source:
-    path: top-level-app
-    repoURL: https://github.com/xsreality/argocd-applicationset-demo.git
+    path: appset
+    repoURL: https://github.com/patelmaulik/gitops
     targetRevision: master
   destination:
     name: ''

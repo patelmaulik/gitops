@@ -3,28 +3,27 @@ kind: ApplicationSet
 metadata:
   name: root-appset
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io  
 spec:
   generators:
-  - list: 
-      # Parameters are generated based on this cluster list, to be substituted
-      # into the template below.
-      elements: 
-      - cluster: engineering-dev
-        url: 'https://kubernetes.default.svc'
-  template: 
-    # An Argo CD Application template, with support for parameter substitution 
-    # with values from parameters generated above.
+  - git:
+      repoURL: https://github.com/patelmaulik/gitops
+      revision: master
+      directories:
+      - path: apps/*
+  template:
     metadata:
-      name: '{{cluster}}-guestbook'
+      name: '{{path.basename}}'
     spec:
       project: santana
       source:
-        repoURL: https://github.com/argoproj-labs/applicationset.git
-        targetRevision: HEAD
-        path: examples/list-generator/guestbook/{{cluster}}
+        repoURL: https://github.com/patelmaulik/gitops
+        targetRevision: master
+        path: '{{path}}'
       destination:
-        server: '{{url}}'
-        namespace: guestbook
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
       syncPolicy:
         automated:
           prune: true
@@ -38,3 +37,49 @@ spec:
             duration: 1h
             maxDuration: 2h
             factor: 2
+
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: root-appset
+#   namespace: argocd
+# spec:
+#   generators:
+#   - git:
+#       repoURL: https://github.com/patelmaulik/gitops
+#       revision: master
+#       directories:
+#       - path: applicationsets/git-dir-generator/apps/*
+#   - list: 
+#       # Parameters are generated based on this cluster list, to be substituted
+#       # into the template below.
+#       elements: 
+#       - cluster: onsite-dev
+#         url: 'https://kubernetes.default.svc'
+#   template: 
+#     # An Argo CD Application template, with support for parameter substitution 
+#     # with values from parameters generated above.
+#     metadata:
+#       name: '{{cluster}}-guestbook'
+#     spec:
+#       project: santana
+#       source:
+#         repoURL: https://github.com/patelmaulik/gitops
+#         targetRevision: HEAD
+#         path: apps/list-generator/guestbook/{{cluster}}
+#       destination:
+#         server: '{{url}}'
+#         namespace: guestbook
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+#         syncOptions:
+#           - PrunePropagationPolicy=foreground
+#           - CreateNamespace=true
+#         retry:
+#           limit: 5
+#           backoff:
+#             duration: 1h
+#             maxDuration: 2h
+#             factor: 2
